@@ -4,12 +4,16 @@
 # ... ... use flag `--refresh`
 # ... ... or set variable `TSINGHUA_NET_ACCURATE`
 
-TIMESTAMP=/tmp/tsinghua-net.timestamp
+[[ -n $TSINGHUA_NET_TIMESTAMP ]] \
+    || TSINGHUA_NET_TIMESTAMP=/tmp/tsinghua-net.timestamp
+
+[[ -n $TSINGHUA_NET_TIMEOUT ]] \
+    || TSINGHUA_NET_TIMEOUT=$(( 30 * 60 ))
 
 [[ $1 == --refresh ]] && refresh=1
 
-if timestamp=$(cat $TIMESTAMP) \
-    && [[ $(( $(date +%s) - timestamp )) -lt $(( 30 * 60 )) ]];
+if timestamp=$(cat $TSINGHUA_NET_TIMESTAMP) \
+    && [[ $(( $(date +%s) - timestamp )) -lt $TSINGHUA_NET_TIMEOUT ]];
 then :
 elif [[ -n $TSINGHUA_NET_ACCURATE ]]; then
     refresh=1

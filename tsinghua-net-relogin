@@ -1,11 +1,12 @@
 #!/bin/bash
 # tsinghua net: re-login (for usage updates)
 
-TIMESTAMP=/tmp/tsinghua-net.timestamp
+[[ -n $TSINGHUA_NET_TIMESTAMP ]] \
+    || TSINGHUA_NET_TIMESTAMP=/tmp/tsinghua-net.timestamp
 
 [[ ! $# -eq 0 ]] && args=("$@") || args=(net)
 
 tsinghua-net logout --host "${args[@]}" >&2
 tsinghua-net login --host "${args[@]}" >&2
 
-date +%s > "$TIMESTAMP"
+date +%s > "$TSINGHUA_NET_TIMESTAMP"

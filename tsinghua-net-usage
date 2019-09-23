@@ -1,0 +1,23 @@
+#!/bin/bash
+# tsinghua net usage
+# ... for accurate data,
+# ... ... use flag `--refresh`
+# ... ... or set variable `TSINGHUA_NET_ACCURATE`
+
+TIMESTAMP=/tmp/tsinghua-net.timestamp
+
+[[ $1 == --refresh ]] && refresh=1
+
+if timestamp=$(cat $TIMESTAMP) \
+    && [[ $(( $(date +%s) - timestamp )) -lt $(( 30 * 60 )) ]];
+then :
+elif [[ -n $TSINGHUA_NET_ACCURATE ]]; then
+    refresh=1
+fi
+
+if [[ -n $refresh ]]; then
+    timeout 2 tsinghua-net-relogin
+    sleep 1
+fi
+
+tsinghua-net status | grep '流量' | grep -v '￥' | sed 's/^.*：//g'

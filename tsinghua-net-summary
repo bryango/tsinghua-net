@@ -1,0 +1,30 @@
+#!/bin/bash
+# tsinghua net: usage summary
+
+spacing="  "
+entries=(
+    "status"
+    "online"
+)
+
+for item in "${entries[@]}"; do
+    echo
+    printf "%s" "$spacing"
+    tsinghua-net "$item" \
+        | tr '\n' '\r' \
+            | sed "s/\r/\r$spacing/g" \
+        | tr '\r' '\n'
+done
+
+echo
+
+# detail without entries <1M
+printf "%s" "$spacing"
+tsinghua-net detail \
+    | grep -v ' B[ |]' \
+    | grep -v ' K[ |]' \
+    | tr '\n' '\r' \
+        | sed "s/\r/\r$spacing/g" \
+    | tr '\r' '\n'
+
+echo

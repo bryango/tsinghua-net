@@ -1,0 +1,14 @@
+#!/bin/bash
+# tsinghua net: purge online ip
+
+ip_list=''
+IFS=$'\n' eval 'ip_list=($(tsinghua-net-ip))'
+
+for ip in "${ip_list[@]}"; do
+    if grep --quiet "$ip" <<< "$(hostname -i)"; then
+        >&2 echo "### This host: $ip"
+    else
+        tsinghua-net drop --address "$ip"
+        >&2 echo "### To drop: $ip ..."
+    fi
+done

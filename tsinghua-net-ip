@@ -1,0 +1,6 @@
+#!/bin/bash
+# tsinghua net: list online ip
+
+tsinghua-net online \
+    | grep -E "^\| [1-9]+" \
+    | sed -E "s/^\| ([0-9.]+) .*/\1/g"
